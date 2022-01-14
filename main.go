@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"projects.go/hangman/dictionary"
 	"projects.go/hangman/hangman"
-	"projects.go/hangman/hangman/dictionary"
 )
 
 func main() {
@@ -20,7 +20,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	g := hangman.New(8, dictionary.PickWord())
+	g, err := hangman.New(8, dictionary.PickWord())
+	if err != nil {
+		fmt.Printf("Could not launch the game: %v\n", err)
+		input := bufio.NewScanner(os.Stdin)
+		fmt.Print("Appuyez sur une touche pour continuer...")
+		input.Scan()
+		os.Exit(1)
+	}
 
 	hangman.DrawWelcome()
 	guess := ""
